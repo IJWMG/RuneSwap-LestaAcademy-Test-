@@ -11,7 +11,7 @@ public class CellBlockersSpawner : MonoBehaviour
     }
     private void SpawnBlockers(){
         var freeFeilds = (from f in _playableFeilds.ActiveFeilds
-                          where (f.X == -1 || f.X == 1) && f.Y % 2 == 0
+                          where !(_playableFeilds.FeildsForRunes.Contains(f)) && f.Y % 2 == 0
                           select f);
         foreach(var feild in freeFeilds){
             Instantiate(_blockerPrefab, feild.transform.position, Quaternion.identity, this.transform);

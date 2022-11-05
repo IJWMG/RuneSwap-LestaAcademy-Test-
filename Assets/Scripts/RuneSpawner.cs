@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Linq;
 using System.Collections.Generic;
 using System;
 
@@ -7,30 +6,40 @@ public class RuneSpawner : MonoBehaviour
 {
     [SerializeField] private Rune[] _runePrefabs;
     [SerializeField] private PlayableFeildsController _playableFeilds;
-    private int _collumnToFill1 = -2, _collumnToFill2 = 0, _collumnToFill3 = 2, _runeTypeCount;
     private Dictionary<RuneType, int> _runeCounters;
+    private int _runeTypeCount;
     private void Awake()
     {
         ResetRuneCounters();
     }
     private void Start()
     {
-        _runeTypeCount = Enum.GetValues(typeof(RuneType)).Length;
+        _runeTypeCount = PlayableFeildsController.FEILD_SIZE / 2 + 1;
         SpanwRunes();
     }
     private void SpanwRunes()
     {
-        var freeFeilds = (from f in _playableFeilds.ActiveFeilds
-                          where f.X == _collumnToFill1 || f.X == _collumnToFill2 || f.X == _collumnToFill3
-                          select f);
-
-        foreach (var feild in freeFeilds)
+        SpawnTopRunes();
+        foreach (var feild in _playableFeilds.FeildsForRunes)
         {
             var randomed = RandomizeRune();
             Instantiate(randomed.gameObject, feild.transform.position, Quaternion.identity, this.transform).
                         GetComponent<Rune>().Type = randomed.type;
         }
         ResetRuneCounters();
+    }
+    private void SpawnTopRunes(){
+        int i = (PlayableFeildsController.FEILD_SIZE -1);
+        int iterationCounter = 0;
+        while(i < _playableFeilds.FeildsForRunes.Length){
+            Instantiate(_runePrefabs[iterationCounter].gameObject, 
+                        new Vector3 ((float)_playableFeilds.FeildsForRunes[i].X, 
+                                     (float)_playableFeilds.FeildsForRunes[i].Y + 1, 1), 
+                        Quaternion.identity, this.transform).
+                        GetComponent<Rune>().Type = (RuneType)iterationCounter;
+            i += PlayableFeildsController.FEILD_SIZE;
+            iterationCounter++;
+        }
     }
 
     private (GameObject gameObject, RuneType type) RandomizeRune()

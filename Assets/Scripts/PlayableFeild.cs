@@ -43,7 +43,6 @@ public class PlayableFeild : MonoBehaviour, IPlaceable
     {
         CurrentRune = null;
         IsOccupied = false;
-        print("Rune released from " + transform.position);
     }
     private void OnMouseEnter()
     {

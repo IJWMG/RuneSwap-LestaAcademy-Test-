@@ -1,19 +1,34 @@
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Events;
+
 
 interface IRuneVew
 {
+    public event UnityAction<int> OnMoveMade;
     public void ChangeRuneCondition(Rune rune, EventType type);
     public void TryMoveToMouseCliked(PlayableFeild feild);
 }
 
-public class RuneVew : MonoBehaviour, IRuneVew
+public class RuneVew : IRuneVew
 {
-    private bool _isMoveing = false;
+    private int _moveCounter;
+    private bool _isMoveing = false, _isUIActive = false;
     private Rune _occupiedRune;
-    private Vector2 _allOneScale = new Vector2(1, 1);
+    private Vector2 _allOneScale = new Vector2(1, 1), _increasedScale = new Vector2(1.1f, 1.1f);
+    public event UnityAction<int> OnMoveMade;
+    
+    private static RuneVew _instace;
+    private RuneVew(){}
+    public static RuneVew GetRuneVew(){
+        if (_instace is null){
+            _instace = new RuneVew();
+        }
+        return _instace;
+    }
     public void ChangeRuneCondition(Rune rune, EventType type)
     {
+        if (_isUIActive) { return;}
         switch (type)
         {
             case EventType.OnMouseDown:
@@ -21,11 +36,12 @@ public class RuneVew : MonoBehaviour, IRuneVew
                 if (!_isMoveing)
                 {
                     _occupiedRune = rune;
+                    _occupiedRune.transform.localScale = _increasedScale;
                 }
                 break;
             case EventType.OnMouseEnter:
                 if (_occupiedRune == rune) { break; }
-                rune.transform.localScale *= 1.1f;
+                rune.transform.localScale = _increasedScale;
                 break;
             case EventType.OnMouseExit:
                 if (_occupiedRune == rune) { break; }
@@ -45,10 +61,13 @@ public class RuneVew : MonoBehaviour, IRuneVew
     }
     private async void MoveRuneAsync(PlayableFeild feild)
     {
+        _moveCounter++;
         await _occupiedRune.transform.DOMove(feild.transform.position, 0.4f).
                                       SetEase(Ease.Linear).AsyncWaitForCompletion();
         _occupiedRune.UpdateCoordinates();
         ReleaseOccupuedRune();
+        Debug.Log("move made");
+        OnMoveMade?.Invoke(_moveCounter);
         _isMoveing = false;
     }
     private void ReleaseOccupuedRune()
@@ -64,4 +83,12 @@ public class RuneVew : MonoBehaviour, IRuneVew
 
         return false;
     }
+    public void Reset() {
+        _isUIActive = true;
+        Debug.Log("occupied rune is " + _occupiedRune);
+        }
+        public void NewGame() {
+            _moveCounter = 0;
+            _isUIActive = false;
+            }
 }

@@ -1,15 +1,12 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(PlayableFeildsController))]
-[RequireComponent(typeof(RuneVew))]
 public class RuneInFeildPresenter : MonoBehaviour
 {
     private IRuneAndFeildModel _runeModel;
-    private IRuneVew _runeVew;
+    private IRuneVew _runeVew = RuneVew.GetRuneVew();
     private void Awake() {
         _runeModel = GetComponent<PlayableFeildsController>();
-        _runeVew = GetComponent<RuneVew>();
         _runeModel.OnConditionChange += ChangeRuneCondition;
         _runeModel.OnMouseClick += MoveToMouseCliked;
     }
@@ -19,5 +16,4 @@ public class RuneInFeildPresenter : MonoBehaviour
     public void MoveToMouseCliked(PlayableFeild feild){
         _runeVew.TryMoveToMouseCliked(feild);
     }
-
 }

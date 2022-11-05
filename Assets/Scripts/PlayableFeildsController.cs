@@ -1,15 +1,19 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Linq;
+using System.Collections.Generic;
 
-interface IRuneAndFeildModel{
+interface IRuneAndFeildModel
+{
     public event UnityAction<Rune, EventType> OnConditionChange;
     public event UnityAction<PlayableFeild> OnMouseClick;
 }
-
+// TODO: сделать возможность выбора поля от 5х5 до 11х11 (?)
 public class PlayableFeildsController : MonoBehaviour, IRuneAndFeildModel
 {
     [SerializeField] private PlayableFeild _cellPrefab;
-    public PlayableFeild[] ActiveFeilds {get; private set; }
+    public PlayableFeild[] ActiveFeilds { get; private set; }
+    public PlayableFeild[] FeildsForRunes { get; private set; }
     public event UnityAction<Rune, EventType> OnConditionChange;
     public event UnityAction<PlayableFeild> OnMouseClick;
     private Vector2[] _coordinatesOfFeilds;
@@ -17,6 +21,8 @@ public class PlayableFeildsController : MonoBehaviour, IRuneAndFeildModel
     private void Awake()
     {
         InitializeAllFeild();
+        GenerateFeildForRunes();
+        WinChecker.SetFeildsToCheck(FeildsForRunes);
     }
     private void InitializeAllFeild()
     {
@@ -27,6 +33,33 @@ public class PlayableFeildsController : MonoBehaviour, IRuneAndFeildModel
             GameObject feild = Instantiate(_cellPrefab.gameObject, _coordinatesOfFeilds[i], Quaternion.identity, this.transform);
             ActiveFeilds[i] = feild.GetComponent<PlayableFeild>();
         }
+    }
+    private void GenerateFeildForRunes()
+    {
+        int[] collumns = CalculateCollumnsForRunes();
+        var freeFeilds = (from f in ActiveFeilds
+                          where (collumns.Contains(f.X))
+                          select f).ToArray();
+        FeildsForRunes = freeFeilds;
+    }
+    private int[] CalculateCollumnsForRunes()
+    {
+        int[] collumns = new int[(FEILD_SIZE / 2) + 1];
+        int i = FEILD_SIZE / 2, j = 0;
+        while (i >= 0)
+        {
+            if (i == 0)
+            {
+                collumns[j] = i;
+                break;
+            }
+            collumns[j] = -i;
+            j++;
+            collumns[j] = i;
+            j++;
+            i -= 2;
+        }
+        return collumns;
     }
     private void FillCoordinates()
     {
@@ -39,10 +72,12 @@ public class PlayableFeildsController : MonoBehaviour, IRuneAndFeildModel
             }
         }
     }
-    public void OnMouseClickInvoker(PlayableFeild feild){
+    public void OnMouseClickInvoker(PlayableFeild feild)
+    {
         OnMouseClick?.Invoke(feild);
     }
-    public void PresentRuneState(Rune rune, EventType eventType){
+    public void PresentRuneState(Rune rune, EventType eventType)
+    {
         OnConditionChange?.Invoke(rune, eventType);
     }
 }

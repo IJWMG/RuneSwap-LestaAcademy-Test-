@@ -36,16 +36,20 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\UIPresenter.cs" />
      <Compile Include="Assets\Scripts\CellBlockersSpawner.cs" />
      <Compile Include="Assets\Scripts\PlayableFeildsController.cs" />
      <Compile Include="Assets\Scripts\RuneType.cs" />
      <Compile Include="Assets\Scripts\EventType.cs" />
      <Compile Include="Assets\Scripts\Rune.cs" />
      <Compile Include="Assets\Scripts\PlayableFeild.cs" />
+     <Compile Include="Assets\Scripts\ScreenUI.cs" />
      <Compile Include="Assets\Scripts\RuneVew.cs" />
      <Compile Include="Assets\Scripts\RuneSpawner.cs" />
      <Compile Include="Assets\Scripts\CellBlocker.cs" />
      <Compile Include="Assets\Scripts\RuneInFeildPresenter.cs" />
+     <Compile Include="Assets\Scripts\WinChecker.cs" />
+     <Compile Include="Assets\Scripts\SceneLoader.cs" />
     <Reference Include="UnityEngine">
         <HintPath>D:\Program Files (x86)\Unity Hub\Editor\2020.3.40f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
