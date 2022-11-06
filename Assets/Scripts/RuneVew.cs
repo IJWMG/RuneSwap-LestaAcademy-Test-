@@ -17,22 +17,25 @@ public class RuneVew : IRuneVew
     private Rune _occupiedRune;
     private Vector2 _allOneScale = new Vector2(1, 1), _increasedScale = new Vector2(1.1f, 1.1f);
     public event UnityAction<int> OnMoveMade;
-    
+    public event UnityAction OnMoveStart;
+    private float _animationDuration = 0.4f;
     private static RuneVew _instace;
-    private RuneVew(){}
-    public static RuneVew GetRuneVew(){
-        if (_instace is null){
+    private RuneVew() { }
+    public static RuneVew GetRuneVew()
+    {
+        if (_instace is null)
+        {
             _instace = new RuneVew();
         }
         return _instace;
     }
     public void ChangeRuneCondition(Rune rune, EventType type)
     {
-        if (_isUIActive) { return;}
+        if (_isUIActive) { return; }
         switch (type)
         {
             case EventType.OnMouseDown:
-                if (_occupiedRune != null && !_isMoveing){_occupiedRune.transform.localScale = _allOneScale;}
+                if (_occupiedRune != null && !_isMoveing) { _occupiedRune.transform.localScale = _allOneScale; }
                 if (!_isMoveing)
                 {
                     _occupiedRune = rune;
@@ -62,7 +65,8 @@ public class RuneVew : IRuneVew
     private async void MoveRuneAsync(PlayableFeild feild)
     {
         _moveCounter++;
-        await _occupiedRune.transform.DOMove(feild.transform.position, 0.4f).
+        OnMoveStart?.Invoke();
+        await _occupiedRune.transform.DOMove(feild.transform.position, _animationDuration).
                                       SetEase(Ease.Linear).AsyncWaitForCompletion();
         _occupiedRune.UpdateCoordinates();
         ReleaseOccupuedRune();
@@ -83,12 +87,16 @@ public class RuneVew : IRuneVew
 
         return false;
     }
-    public void Reset() {
-        _isUIActive = true;
+    public void Reset()
+    {
+        ActivateUI();
         Debug.Log("occupied rune is " + _occupiedRune);
-        }
-        public void NewGame() {
-            _moveCounter = 0;
-            _isUIActive = false;
-            }
+    }
+    public void NewGame()
+    {
+        _moveCounter = 0;
+        DisableUI();
+    }
+    public void ActivateUI() => _isUIActive = true;
+    public void DisableUI() => _isUIActive = false;
 }
