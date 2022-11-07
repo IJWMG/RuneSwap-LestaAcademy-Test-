@@ -8,7 +8,6 @@ public class WinChecker
     public event UnityAction OnWinDetected;
     private RuneVew _runeVew = RuneVew.GetRuneVew();
     private static WinChecker _instace;
-    //private static Dictionary<PlayableFeild[], bool> _feildsToCheck = new Dictionary<PlayableFeild[], bool>();
     private static List<PlayableFeild[]> _feildsToCheck;
     private WinChecker()
     {
@@ -38,7 +37,7 @@ public class WinChecker
     }
     private void CheckForWin(int dontNeed)
     {
-        Debug.Log("Checking");
+        //Debug.Log("Checking");
         for (int i = 0; i < _feildsToCheck.Count; i++)
         {
             foreach (var feild in _feildsToCheck[i])
@@ -57,7 +56,7 @@ public class WinChecker
         }
         OnWinDetected?.Invoke();
         Reload();
-        Debug.Log("Check sucsess, win");
+        //Debug.Log("Check sucsess, win");
     }
     private void Reload()
     {

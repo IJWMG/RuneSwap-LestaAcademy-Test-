@@ -28,13 +28,15 @@ public class RuneSpawner : MonoBehaviour
         }
         ResetRuneCounters();
     }
-    private void SpawnTopRunes(){
-        int i = (PlayableFeildsController.FEILD_SIZE -1);
+    private void SpawnTopRunes()
+    {
+        int i = (PlayableFeildsController.FEILD_SIZE - 1);
         int iterationCounter = 0;
-        while(i < _playableFeilds.FeildsForRunes.Length){
-            Instantiate(_runePrefabs[iterationCounter].gameObject, 
-                        new Vector3 ((float)_playableFeilds.FeildsForRunes[i].X, 
-                                     (float)_playableFeilds.FeildsForRunes[i].Y + 1, 1), 
+        while (i < _playableFeilds.FeildsForRunes.Length)
+        {
+            Instantiate(_runePrefabs[iterationCounter].gameObject,
+                        new Vector3((float)_playableFeilds.FeildsForRunes[i].X,
+                                     (float)_playableFeilds.FeildsForRunes[i].Y + 1, 1),
                         Quaternion.identity, this.transform).
                         GetComponent<Rune>().Type = (RuneType)iterationCounter;
             i += PlayableFeildsController.FEILD_SIZE;

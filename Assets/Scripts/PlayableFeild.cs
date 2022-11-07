@@ -22,46 +22,43 @@ public class PlayableFeild : MonoBehaviour, IPlaceable
         }
         SetCurrentRune(other);
     }
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.GetComponent<IPlaceable>() is null)
-        {
-            return;
-        }
-        ReleaseCurrentRune();
-    }
-
     private void SetCurrentRune(Collider2D collider)
     {
         Rune rune = collider.GetComponent<Rune>();
-        if(rune != null){
+        if (rune != null)
+        {
             CurrentRune = rune;
         }
         IsOccupied = true;
     }
-    private void ReleaseCurrentRune()
+    public void ReleaseCurrentRune()
     {
+        //print("feild is free");
         CurrentRune = null;
         IsOccupied = false;
     }
     private void OnMouseEnter()
     {
-        if(CurrentRune is null) {return;}
+        if (CurrentRune is null) { return; }
 
-        _controller.PresentRuneState(CurrentRune, EventType.OnMouseEnter);
+        _controller.PresentRuneState(this, EventType.OnMouseEnter);
     }
-    private void OnMouseDown() {
-        if(!IsOccupied) {
+    private void OnMouseDown()
+    {
+        if (!IsOccupied)
+        {
             _controller.OnMouseClickInvoker(this);
         }
-        else if (CurrentRune != null){
-            _controller.PresentRuneState(CurrentRune, EventType.OnMouseDown);
+        else if (CurrentRune != null)
+        {
+            _controller.PresentRuneState(this, EventType.OnMouseDown);
         }
     }
-    private void OnMouseExit() {
-        if(CurrentRune is null) {return;}
+    private void OnMouseExit()
+    {
+        if (CurrentRune is null) { return; }
 
-        _controller.PresentRuneState(CurrentRune, EventType.OnMouseExit);
+        _controller.PresentRuneState(this, EventType.OnMouseExit);
 
     }
 }

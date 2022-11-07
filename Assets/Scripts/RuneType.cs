@@ -1,6 +1,7 @@
 using System;
 
-public enum RuneType{
+public enum RuneType
+{
     First,
     Second,
     Third

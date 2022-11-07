@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 interface IRuneAndFeildModel
 {
-    public event UnityAction<Rune, EventType> OnConditionChange;
+    public event UnityAction<PlayableFeild, EventType> OnConditionChange;
     public event UnityAction<PlayableFeild> OnMouseClick;
 }
 // TODO: сделать возможность выбора поля от 5х5 до 11х11 (?)
@@ -14,7 +14,7 @@ public class PlayableFeildsController : MonoBehaviour, IRuneAndFeildModel
     [SerializeField] private PlayableFeild _cellPrefab;
     public PlayableFeild[] ActiveFeilds { get; private set; }
     public PlayableFeild[] FeildsForRunes { get; private set; }
-    public event UnityAction<Rune, EventType> OnConditionChange;
+    public event UnityAction<PlayableFeild, EventType> OnConditionChange;
     public event UnityAction<PlayableFeild> OnMouseClick;
     private Vector2[] _coordinatesOfFeilds;
     public const int FEILD_SIZE = 5;
@@ -76,8 +76,8 @@ public class PlayableFeildsController : MonoBehaviour, IRuneAndFeildModel
     {
         OnMouseClick?.Invoke(feild);
     }
-    public void PresentRuneState(Rune rune, EventType eventType)
+    public void PresentRuneState(PlayableFeild feild, EventType eventType)
     {
-        OnConditionChange?.Invoke(rune, eventType);
+        OnConditionChange?.Invoke(feild, eventType);
     }
 }

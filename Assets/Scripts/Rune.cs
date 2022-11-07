@@ -37,7 +37,8 @@ public class Rune : MonoBehaviour, IPlaceable
     {
         UpdateCoordinates();
     }
-    public void UpdateCoordinates(){
+    public void UpdateCoordinates()
+    {
         X = (int)transform.position.x;
         Y = (int)transform.position.y;
     }

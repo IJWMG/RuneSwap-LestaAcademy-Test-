@@ -6,18 +6,22 @@ public class GameMenuController : MonoBehaviour
     public event UnityAction OnEscapeButtonDown, OnAudioButtonDown;
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)){
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
             OnEscapeButtonDown?.Invoke();
             print("escape is down");
         }
     }
-    public void OnExitDown(){
+    public void OnExitDown()
+    {
         Application.Quit();
     }
-    public void OnMenuClose(){
+    public void OnMenuClose()
+    {
         OnEscapeButtonDown?.Invoke();
     }
-    public void OnAudioDown(){
+    public void OnAudioDown()
+    {
         OnAudioButtonDown?.Invoke();
     }
 }

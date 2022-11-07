@@ -1,6 +1,7 @@
 using System;
 
-public enum EventType{
+public enum EventType
+{
     OnMouseEnter,
     OnMouseDown,
     OnMouseExit
